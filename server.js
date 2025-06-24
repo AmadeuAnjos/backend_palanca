@@ -18,9 +18,14 @@ if (!JWT_SECRET) {
     process.exit(1); // Encerra a aplicação se o segredo não estiver configurado
 }
 
+const allowedOrigin = process.env.FRONTEND_URL?.replace(/\/$/, '') || 'http://localhost:5173';
+
 app.use(cors({
-    origin: process.env.FRONTEND_URL || 'http://localhost:5173' // Use variável de ambiente para o frontend URL
+    origin: allowedOrigin,
+    methods: ['GET', 'POST', 'DELETE'],
+    credentials: false
 }));
+
 app.use(bodyParser.json());
 
 const authenticateToken = (req, res, next) => {
